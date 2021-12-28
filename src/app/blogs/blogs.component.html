@@ -4,3 +4,20 @@
 
 <a class="btn btn-primary m-1" routerLink="/blogs/blog1.benham2.ir">blog1</a>
 <a class="btn btn-primary m-1" routerLink="/blogs/blog2.benham2.ir">blog2</a>
+
+
+<div class="container-fluid">
+    <div class="" *ngIf="this.itemsx | async as jak">
+
+        <div *ngFor="let obj of jak.items" class="row {{obj.status}}" style="direction:rtl">
+
+            <div class="col">{{obj.title}}</div>
+
+            <div class="col text-right"> <input style="direction:ltr;width:100%" (change)="modelChanged($event,obj)" (keyup.enter)="update(obj)" type="number" [(ngModel)]="obj.price" placeholder="price" /></div>
+
+        </div>
+    </div>
+
+</div>
+
+<button class="btn btn-primary m-3" (click)="this.latest.more()">more</button>
