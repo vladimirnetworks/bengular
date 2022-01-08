@@ -1,1 +1,14 @@
-<p>index works!</p>
+<input style="text-align:center;direction:rtl" class="m-3" [(ngModel)]="searchquery" autocomplete="off" (keyup)="search()">
+
+<div class="container-fluid">
+    <div class="" *ngIf="this.itemsx | async as jak">
+
+        <div *ngFor="let obj of jak.items" style="direction:rtl">
+
+            <div class="col">{{obj.title}}</div>
+
+
+        </div>
+    </div>
+
+</div>
