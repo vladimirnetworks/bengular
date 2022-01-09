@@ -11,6 +11,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BlogsComponent } from './blogs/blogs.component';
 import { BlogComponent } from './blog/blog.component';
 import { ApiService } from './api.service';
+import { PostComponent } from './post/post.component';
+import { DomainComponent } from './domain/domain.component';
+
 
 const appRoutes: Routes = [
 
@@ -26,6 +29,9 @@ const appRoutes: Routes = [
   { path: '', component: IndexComponent ,  canActivate:[AuthService]},
   { path: 'blogs', component: BlogsComponent ,  canActivate:[AuthService]},
   { path: 'blogs/:id', component: BlogComponent ,  canActivate:[AuthService]},
+
+  { path: 'domain/:domain', component: DomainComponent ,  canActivate:[AuthService] },
+  { path: 'post/:domain/:post', component: PostComponent ,  canActivate:[AuthService] },
  
  ];
 
@@ -34,7 +40,9 @@ const appRoutes: Routes = [
     AppComponent,
     IndexComponent,
     BlogsComponent,
-    BlogComponent
+    BlogComponent,
+    PostComponent,
+    DomainComponent
   ],
   imports: [
     HttpClientModule,

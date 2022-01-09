@@ -3,12 +3,21 @@
 <div class="container-fluid">
     <div class="" *ngIf="this.itemsx | async as jak">
 
-        <div *ngFor="let obj of jak.items" style="direction:rtl">
+        <div class="row" *ngFor="let obj of jak.items" style="direction:rtl">
 
-            <div class="col">{{obj.title}}</div>
+            <div class="col-1">{{obj.type}}</div>
+            <div class="col">
+
+                <a *ngIf="obj.type == 'post'" routerLink="/post/{{obj.data.domain}}/{{obj.data.id}}">{{obj.title}}</a>
+
+                <a *ngIf="obj.type == 'domain'" routerLink="/domain/{{obj.data}}">{{obj.title}}</a>
+
+            </div>
 
 
         </div>
     </div>
 
 </div>
+
+<router-outlet></router-outlet>
