@@ -32,6 +32,11 @@ const appRoutes: Routes = [
 
   { path: 'domain/:domain', component: DomainComponent ,  canActivate:[AuthService] },
   { path: 'post/:domain/:post', component: PostComponent ,  canActivate:[AuthService] },
+
+
+
+  { path: 'console', loadChildren: () => import(`./console/console.module`).then(m => m.ConsoleModule) }
+
  
  ];
 
@@ -43,6 +48,7 @@ const appRoutes: Routes = [
     BlogComponent,
     PostComponent,
     DomainComponent
+    
   ],
   imports: [
     HttpClientModule,
