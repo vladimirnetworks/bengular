@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+import { apidata, ApiService } from '../api.service';
 
 @Component({
   selector: 'app-post',
@@ -8,13 +10,23 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class PostComponent implements OnInit {
 
-  postid:any;
+  domain_id:any;
+  post_id:any;
 
-  constructor(private ar: ActivatedRoute) {
+  //post:any;
+
+  post: Observable<apidata> | undefined;
+
+  constructor(private ar: ActivatedRoute,private api:ApiService) {
 
     this.ar.paramMap.subscribe((z:any) => {
      
-      this.postid = z['params']['postid']
+      this.domain_id = z['params']['domain_id'];
+      this.post_id = z['params']['post_id'];
+    
+      this.post = this.api.get("post/"+this.domain_id+"/"+this.post_id);
+
+
     });
 
 
@@ -23,4 +35,11 @@ export class PostComponent implements OnInit {
   ngOnInit(): void {
   }
 
+}
+
+
+
+export class xobj {
+  title: any;
+ 
 }

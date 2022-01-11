@@ -1,3 +1,11 @@
 <p>post works!</p>
 
-{{postid}}
+
+<div class="" *ngIf="this.post | async as postx">
+
+    <input [(ngModel)]="postx.data.url" /><br>
+    <input [(ngModel)]="postx.data.title" /><br>
+    <textarea [(ngModel)]="postx.data.caption"></textarea><br>
+    <textarea [(ngModel)]="postx.data.text"></textarea>
+
+</div>
