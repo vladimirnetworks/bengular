@@ -32,9 +32,9 @@ apiurl = 'http://www.benham2.ir:8000/api/admin/';
   }
 
 
-  delete(path:string, body:any) {
-    console.log(this.apiurl + path + ',,' + JSON.stringify(body));
-    return this.http.delete<apidata>(this.apiurl + path, body);
+  delete(path:string) {
+   
+    return this.http.delete<apidata>(this.apiurl + path);
   }
 
 }

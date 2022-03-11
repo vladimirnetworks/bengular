@@ -5,7 +5,11 @@
 
     <input [(ngModel)]="postx.data.url" /><br>
     <input [(ngModel)]="postx.data.title" /><br>
-    <textarea [(ngModel)]="postx.data.caption"></textarea><br>
+    <textarea [(ngModel)]="postx.data.tiny_text"></textarea><br>
     <textarea [(ngModel)]="postx.data.text"></textarea>
+    <button  (click)="postx.save() ; ">save</button>
 
+   
+    <button *ngIf="postx.post_id > 0" (click)="postx.delete()">delete</button>
 </div>
+

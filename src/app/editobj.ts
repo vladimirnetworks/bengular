@@ -62,7 +62,7 @@ export class editobj {
     console.log(this.id);
 
     this.api
-      .delete(this.path + '/' + this['id'], {})
+      .delete(this.path + '/' + this['id'])
       .subscribe(console.log);
 
 

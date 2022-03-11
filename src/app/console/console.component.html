@@ -10,9 +10,10 @@
             <div class="col-1">{{obj.type}}</div>
             <div class="col">
 
-                <a *ngIf="obj.type == 'post'" routerLink="post/{{obj.data.domain_id}}/{{obj.data.id}}">{{obj.title}}</a>
+                <a *ngIf="obj.type == 'post'" routerLink="post/{{obj.data.domain}}/{{obj.data.id}}">{{obj.title}}</a>
 
-                <a *ngIf="obj.type == 'domain'" routerLink="domain/{{obj.data}}">{{obj.title}}</a>
+                <a *ngIf="obj.type == 'domain'" routerLink="domain/{{obj.data.domain}}">{{obj.title}}</a> | <a *ngIf="obj.type == 'domain'" routerLink="post/{{obj.data.domain}}/new">new post</a>
+
 
             </div>
 

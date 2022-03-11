@@ -43,7 +43,4 @@ export class myBlogs extends editobj {
   title: any;
 
 
-
-
- // override fillable = ['price'];
 }
