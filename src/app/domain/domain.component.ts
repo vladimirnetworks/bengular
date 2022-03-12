@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-domain',
@@ -7,7 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DomainComponent implements OnInit {
 
-  constructor() { }
+  domain :any;
+  constructor(private ar: ActivatedRoute) { 
+
+    
+    this.ar.paramMap.subscribe((z: any) => {
+
+      this.domain = z['params']['domain'];
+    });
+
+  }
 
   ngOnInit(): void {
   }

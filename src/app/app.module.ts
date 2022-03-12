@@ -13,6 +13,9 @@ import { BlogComponent } from './blog/blog.component';
 import { ApiService } from './api.service';
 import { PostComponent } from './post/post.component';
 import { DomainComponent } from './domain/domain.component';
+import { PostsComponent } from './posts/posts.component';
+import { DomainOverviewComponent } from './domain-overview/domain-overview.component';
+import { DomainConfigComponent } from './domain-config/domain-config.component';
 
 
 const appRoutes: Routes = [
@@ -47,7 +50,9 @@ const appRoutes: Routes = [
     BlogsComponent,
     BlogComponent,
     PostComponent,
-    DomainComponent
+    PostsComponent,
+    DomainOverviewComponent,
+    DomainConfigComponent
     
   ],
   imports: [

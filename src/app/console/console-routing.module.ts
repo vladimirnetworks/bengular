@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DomainComponent } from '../domain/domain.component';
 import { PostComponent } from '../post/post.component';
+import { PostsComponent } from '../posts/posts.component';
 import { ConsoleComponent } from './console.component';
 
 
@@ -11,13 +12,12 @@ import { ConsoleComponent } from './console.component';
 const routes: Routes = [
   {
     path: '', component: ConsoleComponent, children: [
-      {
-        path: 'post/:domain_id/:post_id', component: PostComponent
-      }
-,
-      {
-        path: 'domain/:domain', component: DomainComponent
-      }
+
+
+
+      { path: 'domain', loadChildren: () => import(`./domain.module`).then(m => m.DomainModule) }
+
+
 
     ]
   }

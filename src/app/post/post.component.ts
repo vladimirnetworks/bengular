@@ -19,12 +19,16 @@ export class PostComponent implements OnInit {
 
   constructor(private ar: ActivatedRoute, private api: ApiService) {
 
-    this.ar.paramMap.subscribe((z: any) => {
+    this.ar.parent?.paramMap.subscribe((parent:any)=>{
+      
+      this.domain_id =  parent["params"]['domain'];
 
-      this.domain_id = z['params']['domain_id'];
-      this.post_id = z['params']['post_id'];
+      this.ar.paramMap.subscribe((z: any) => {
 
- 
+
+        this.post_id = z['params']['post_id'];
+
+
 
       var lp;
       if (this.post_id != 'new') {
@@ -45,7 +49,10 @@ export class PostComponent implements OnInit {
       }));
 
 
+
+      });
     });
+
 
 
   }
