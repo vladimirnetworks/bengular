@@ -1,1 +1,17 @@
-{{domain}}<p> config </p>
+config ::
+
+
+
+ <input placeholder="title" #ctitle [(ngModel)]="title">
+ <br>
+ <textarea placeholder="category (json)" [(ngModel)]="cat"></textarea>
+ <br>
+ <button (click)="update()">update</button>
+ <br>
+ <hr>
+ <button (click)="delete()"> delete</button>
+
+<br>
+
+
+
