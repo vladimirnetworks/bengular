@@ -1,1 +1,12 @@
 <p>show all posts of {{domain}} here</p>
+<a routerLink="../post/new">addnew</a>
+
+
+<div class="" *ngIf="this.itemsx | async as jak">
+
+        <div class="row" *ngFor="let obj of jak.items" style="direction:rtl">
+
+            <a *ngIf="obj.type == 'post'" routerLink="../post/{{obj.data.id}}">{{obj.title}}</a>
+
+        </div>
+     </div>

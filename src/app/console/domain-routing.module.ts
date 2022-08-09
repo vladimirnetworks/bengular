@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { DomainConfigComponent } from '../domain-config/domain-config.component';
 import { DomainOverviewComponent } from '../domain-overview/domain-overview.component';
 import { DomainComponent } from '../domain/domain.component';
+
 import { PostComponent } from '../post/post.component';
 import { PostsComponent } from '../posts/posts.component';
 
@@ -17,7 +18,10 @@ const routes: Routes = [
 
       {
         path: '', component: DomainOverviewComponent
+        
       }
+      
+
       ,
 
       {

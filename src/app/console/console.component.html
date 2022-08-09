@@ -1,6 +1,6 @@
 <p>console works!</p>
 
-<input style="text-align:center;direction:rtl" class="m-3" [(ngModel)]="searchquery" autocomplete="off" (keyup)="search()">
+<input style="text-align:center" dir="auto" class="m-3" [(ngModel)]="searchquery" autocomplete="off" (keyup)="search()">
 
 <div class="container-fluid">
     <div class="" *ngIf="this.itemsx | async as jak">
@@ -12,7 +12,7 @@
 
                 <a *ngIf="obj.type == 'post'" routerLink="domain/{{obj.data.domain}}/post/{{obj.data.id}}">{{obj.title}}</a>
 
-                <a *ngIf="obj.type == 'domain'" routerLink="domain/{{obj.data.domain}}">{{obj.title}}</a> | <a *ngIf="obj.type == 'domain'" routerLink="post/{{obj.data.domain}}/new">new post</a>
+                <a *ngIf="obj.type == 'domain'" routerLink="domain/{{obj.data.domain}}">{{obj.title}}</a>
 
 
             </div>

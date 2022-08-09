@@ -16,6 +16,7 @@ import { DomainComponent } from './domain/domain.component';
 import { PostsComponent } from './posts/posts.component';
 import { DomainOverviewComponent } from './domain-overview/domain-overview.component';
 import { DomainConfigComponent } from './domain-config/domain-config.component';
+import { NewBlogComponent } from './new-blog/new-blog.component';
 
 
 const appRoutes: Routes = [
@@ -52,7 +53,9 @@ const appRoutes: Routes = [
     PostComponent,
     PostsComponent,
     DomainOverviewComponent,
-    DomainConfigComponent
+    DomainConfigComponent,
+    NewBlogComponent
+    
     
   ],
   imports: [

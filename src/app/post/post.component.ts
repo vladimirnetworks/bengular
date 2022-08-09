@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, Observable, of } from 'rxjs';
 import { apidata, ApiService } from '../api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-post',
@@ -17,7 +18,7 @@ export class PostComponent implements OnInit {
 
   post: Observable<post> | undefined;
 
-  constructor(private ar: ActivatedRoute, private api: ApiService) {
+  constructor(public ar: ActivatedRoute, private api: ApiService,public router: Router) {
 
     this.ar.parent?.paramMap.subscribe((parent:any)=>{
       
@@ -44,7 +45,7 @@ export class PostComponent implements OnInit {
 
       this.post = lp.pipe(map(x => {
 
-        return Object.assign(new post(this.api, this.domain_id, this.post_id), x);
+        return Object.assign(new post(this.api, this.domain_id, this.post_id,this.router,this.ar), x);
 
       }));
 
@@ -74,17 +75,19 @@ export class post {
   
   data: any;
 
-  constructor(private api: ApiService, private domain_id: any, public post_id: any) { }
+  constructor(private api: ApiService, private domain_id: any, public post_id: any,public router: Router,public ar: ActivatedRoute) { }
 
   save() {
     if (this.post_id != "new") {
-      this.api.put("post/" + this.domain_id + "/" + this.post_id, this.data).subscribe();
+      this.api.put("post/" + this.domain_id + "/" + this.post_id, this.data).subscribe(x=>{
+        this.router.navigate(['../../posts'], {relativeTo: this.ar});
+      });
 
     } else {
 
       this.api.post("post/" + this.domain_id + "/" + this.post_id, this.data).subscribe(x=>{
         
-
+        this.router.navigate(['../../posts'], {relativeTo: this.ar});
           this.post_id = x.data.id;
 
       });
@@ -96,7 +99,9 @@ export class post {
 
 
   delete() {
-    this.api.delete("post/" + this.domain_id + "/" + this.post_id).subscribe();
+    this.api.delete("post/" + this.domain_id + "/" + this.post_id).subscribe(x=>{
+      this.router.navigate(['../../posts'], {relativeTo: this.ar});
+    });
   }
 
 }

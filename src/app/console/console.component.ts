@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ApiService } from '../api.service';
 import { xobj, Apilist } from '../apilist';
@@ -18,7 +19,7 @@ export class ConsoleComponent implements OnInit {
   itemsx: Observable<xobj> | undefined;
   
   searchquery:any;
-  constructor( private api: ApiService) { }
+  constructor( private api: ApiService,public ar: ActivatedRoute,public router: Router) { }
 
   ngOnInit(): void {
   }
@@ -27,11 +28,18 @@ export class ConsoleComponent implements OnInit {
 
 
   search() {
+    if (this.searchquery == 'newblog') {
+         
+
+           this.router.navigate(['newblog'], {relativeTo: this.ar});
+
+    } else {
     let locallates = new Apilist('search/'+this.searchquery, this.api, myBlogs);
 
     this.latest = locallates;
 
     this.itemsx = locallates.ret;
+    }
 
   }
 

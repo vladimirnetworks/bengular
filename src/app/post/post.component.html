@@ -10,6 +10,6 @@
     <button  (click)="postx.save() ; ">save</button>
 
    
-    <button *ngIf="postx.post_id > 0" (click)="postx.delete()">delete</button>
+    <button *ngIf="postx.post_id > 0" (click)="postx.delete(); ">delete</button>
 </div>
 

@@ -21,7 +21,7 @@ export class editobj {
   }
 
 
-
+ 
 
   save() {
 
@@ -42,6 +42,7 @@ export class editobj {
         this.id = ret['data']['id'];
         this.status = "idle";
 
+
       });
     } else {
        savex = saveobj['id'] = this['id'];
@@ -49,6 +50,7 @@ export class editobj {
         .put(this.path + '/' + this['id'], saveobj)
         .subscribe((ret) => {
           this.status = "idle";
+         
         });
     }
 
