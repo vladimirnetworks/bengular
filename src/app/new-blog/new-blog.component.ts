@@ -12,33 +12,40 @@ import { Router } from '@angular/router';
 })
 export class NewBlogComponent implements OnInit {
 
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService,public ar: ActivatedRoute,public router: Router) { }
 
   blog: Observable<any> | undefined;
-  searchquery:any;
+  searchquery: any;
+  status = "";
 
   register() {
-    this.api.post("regdomain", this.searchquery).subscribe(x=>{
+    this.api.post("regdomain", {"domain":this.searchquery}).subscribe((x:any) => {
+     
+      this.status = x.status;
       console.log(x)
-    //  this.router.navigate(['../../posts'], {relativeTo: this.ar});
-        //this.post_id = x.data.id;
+      if (x.status == 'ok') {
+        this.router.navigate(['../domain/'+this.searchquery], {relativeTo: this.ar});
+
+      } 
+      // 
+      //this.post_id = x.data.id;
 
     });
   }
-  check(e:any) {
+  check(e: any) {
 
-   
+
 
     if (e.keyCode == 13) {
-      
+
       this.register();
 
 
     } else {
 
-    var c = this.api.get("checkdomain/"+this.searchquery);
-    
-    this.blog = c;
+      var c = this.api.get("checkdomain/" + this.searchquery);
+
+      this.blog = c;
     }
 
     /*

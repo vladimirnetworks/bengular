@@ -99,9 +99,34 @@ export class post {
 
 
   delete() {
-    this.api.delete("post/" + this.domain_id + "/" + this.post_id).subscribe(x=>{
-      this.router.navigate(['../../posts'], {relativeTo: this.ar});
-    });
+
+    let randx = new Array(5).join().replace(/(.|$)/g, function(){return ((Math.random()*36)|0).toString(36)[Math.random()<.5?"toString":"toUpperCase"]();});
+
+    let delx = confirm("delete this post ?");
+
+    if (delx) {
+      document.body.style.display= "none"
+     setTimeout(()=>{
+      
+      document.body.style.display= ""
+
+      setTimeout(()=>{
+      
+           if (confirm("motmaen ? ") && prompt("type this reversed : \n\n"+randx, "") == [...randx].reverse().join("")) {
+            this.api.delete("post/" + this.domain_id + "/" + this.post_id).subscribe(x=>{
+              this.router.navigate(['../../posts'], {relativeTo: this.ar});
+            });
+           } else {
+             alert("نشد");
+           }
+
+          },200);
+
+     },500);
+
+
+  }
+
   }
 
 }

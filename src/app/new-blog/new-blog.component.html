@@ -1,5 +1,5 @@
 <input placeholder="domain..." (keyup)="check($event)" [(ngModel)]="searchquery">
-
+{{status}}
 <div class="" *ngIf="this.blog | async as blogx">
    <button *ngIf="blogx.status < 0" (click)="register()">register</button>
    <div *ngIf="blogx.status > 0">not availble</div>
