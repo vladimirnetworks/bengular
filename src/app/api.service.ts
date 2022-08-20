@@ -11,7 +11,8 @@ export interface apidata {
 export class ApiService {
   constructor(private http: HttpClient) {}
 
-apiurl = 'http://www.benham2.ir:8000/api/admin/';
+apiurl = 'https://www.benham.ir/api/admin/';
+
 
   logo :any;
 
