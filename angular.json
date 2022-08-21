@@ -102,5 +102,7 @@
       }
     }
   },
-  "defaultProject": "bengular"
+  "cli": {
+    "analytics": false
+  }
 }

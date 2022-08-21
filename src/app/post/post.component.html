@@ -1,15 +1,34 @@
 <p>post works!</p>
 
 
-<div class="" *ngIf="this.post | async as postx">
+<div class="" *ngIf="this.post | async as postx" style="">
 
     <input [(ngModel)]="postx.data.url" /><br>
     <input [(ngModel)]="postx.data.title" /><br>
     <textarea [(ngModel)]="postx.data.tiny_text"></textarea><br>
-    <textarea [(ngModel)]="postx.data.text"></textarea>
+
+
+    <editor  [init]="{
+        height: 500,
+        directionality: 'rtl',
+
+        plugins: [
+           ''
+        ],
+        toolbaxr:
+         ''
+      }" apiKey="dyeengszffhxo9qe0sb5u8rjc721zec1yka6tjc3nssmx6c4" [(ngModel)]="postx.data.text" ></editor>
+
+
     <button  (click)="postx.save() ; ">save</button>
 
    
     <button *ngIf="postx.post_id > 0" (click)="postx.delete(); ">delete</button>
+
+
+
+
+
+
 </div>
 
