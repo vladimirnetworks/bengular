@@ -17,7 +17,7 @@ import { PostsComponent } from './posts/posts.component';
 import { DomainOverviewComponent } from './domain-overview/domain-overview.component';
 import { DomainConfigComponent } from './domain-config/domain-config.component';
 import { NewBlogComponent } from './new-blog/new-blog.component';
-
+//import { EditorModule } from '@tinymce/tinymce-angular';
 
 const appRoutes: Routes = [
 

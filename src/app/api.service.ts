@@ -12,6 +12,7 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
 apiurl = 'https://www.benham.ir/api/admin/';
+//apiurl = 'http://192.168.1.216:8000/api/admin/';
 
 
   logo :any;
