@@ -16,6 +16,7 @@ export class DomainConfigComponent implements OnInit {
 
   title: string = "";
   cat: string = "";
+  tags: string = "";
 
   constructor(private ar: ActivatedRoute, private api: ApiService, public router: Router) {
     this.ar.parent?.paramMap.subscribe((parent: any) => {
@@ -26,6 +27,7 @@ export class DomainConfigComponent implements OnInit {
       console.log(x)
       this.title = x.title;
       this.cat = x.cats;
+      this.tags = x.tags;
     });
 
   }
@@ -36,7 +38,7 @@ export class DomainConfigComponent implements OnInit {
 
   update() {
     // console.log(this.conf$)
-    this.api.post("domain/" + this.domain, { "title": this.title, "cat": this.cat }).subscribe((x: any) => {
+    this.api.post("domain/" + this.domain, { "title": this.title, "cat": this.cat , "tags": this.tags}).subscribe((x: any) => {
 
 
 
