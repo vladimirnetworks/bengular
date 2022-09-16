@@ -129,6 +129,98 @@ export class post {
 
   }
 
+
+ async  doimg(inp:any, doing:any) {
+      return new Promise(async (resolve) => {
+        var str_s = inp;
+        var regx = /<img[^>]*src="([^"]+)"[^>]*>/g;
+        var m;
+        while ((m = regx.exec(inp))) {
+          if (m[1].includes('webp') == false) {
+            str_s = str_s.replace(m[0], await doing(m[1]));
+          }
+        }
+        resolve(str_s);
+      });
+    }
+
+    
+
+    getJpegBytes(canvas:any, callback:any) {
+      var fileReader = new FileReader();
+
+      fileReader.addEventListener('loadend', function () {
+        callback(this.error, this.result);
+      });
+
+      canvas.toBlob(
+        fileReader.readAsArrayBuffer.bind(fileReader),
+        'image/jpeg'
+      );
+    }
+
+
+
+
+  dodox() {
+
+    console.log(this.data.text);
+
+    var self = this;
+    this.doimg(this.data.text, (img:any) => {
+      return new Promise((resolve) => {
+        var timg = new Image();
+
+        timg.crossOrigin = 'Anonymous';
+        timg.onload = function () {
+          console.log(timg.width + ' ' + timg.height);
+
+          var x = document.createElement('CANVAS') as HTMLCanvasElement;
+          x.width = timg.width;
+          x.height = timg.height;
+          var ctx = x.getContext('2d');
+          if (ctx !== null) {
+          ctx.fillStyle = '#FF0000';
+          ctx.drawImage(timg, 0, 0);
+          }
+
+          self.getJpegBytes(x, function (error:any, arrayBuffer:any) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://127.0.0.1:8000');
+            xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+
+            xhr.onreadystatechange = function () {
+              if (this.readyState == 4 && this.status == 200) {
+                resolve(this.responseText);
+              }
+            };
+
+            xhr.send(arrayBuffer);
+          });
+
+          var dataURL = x.toDataURL('image/png');
+        };
+        if (!img.includes(';base64,')) {
+          img = 'https://sc.upid.ir/apix.php?url=' + img;
+        }
+        timg.src = img;
+
+        /*setTimeout(() => {
+            
+          }, 500);*/
+      });
+    }).then((m:any) => {
+     
+     self.data.text=m;
+      //this.khk = m;
+    });
+
+
+  }
+
+
+
+
 }
 
 
