@@ -186,7 +186,7 @@ export class post {
 
           self.getJpegBytes(x, function (error:any, arrayBuffer:any) {
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://127.0.0.1:8000');
+            xhr.open('POST', 'https://sc.upid.ir/toteleg.php');
             xhr.setRequestHeader('Content-Type', 'application/octet-stream');
 
             xhr.onreadystatechange = function () {
