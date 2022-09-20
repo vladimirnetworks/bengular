@@ -7,16 +7,19 @@
     <input [(ngModel)]="postx.data.title" /><br>
     <textarea [(ngModel)]="postx.data.tiny_text"></textarea><br>
 
+    <textarea (click)="postx.jsondlgen()" [(ngModel)]="postx.data.ldjson" style="width: 100%;height:200px"></textarea><br>
 
     <editor  [init]="{
+        setup: setup,
         height: 500,
+        media_poster: true,
         directionality: 'rtl',
 
         plugins: [
-           'image','media','emoticons'
+           'image','media','emoticons','code'
         ],
-        toolbaxr:
-         ''
+        toolbar:
+         'media namasha | code | bold italic backcolor link anchor'
       }" apiKey="dyeengszffhxo9qe0sb5u8rjc721zec1yka6tjc3nssmx6c4" [(ngModel)]="postx.data.text" ></editor>
 
 

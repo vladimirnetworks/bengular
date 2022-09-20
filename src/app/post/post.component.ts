@@ -18,11 +18,11 @@ export class PostComponent implements OnInit {
 
   post: Observable<post> | undefined;
 
-  constructor(public ar: ActivatedRoute, private api: ApiService,public router: Router) {
+  constructor(public ar: ActivatedRoute, private api: ApiService, public router: Router) {
 
-    this.ar.parent?.paramMap.subscribe((parent:any)=>{
-      
-      this.domain_id =  parent["params"]['domain'];
+    this.ar.parent?.paramMap.subscribe((parent: any) => {
+
+      this.domain_id = parent["params"]['domain'];
 
       this.ar.paramMap.subscribe((z: any) => {
 
@@ -31,23 +31,26 @@ export class PostComponent implements OnInit {
 
 
 
-      var lp;
-      if (this.post_id != 'new') {
-        lp = this.api.get("post/" + this.domain_id + "/" + this.post_id);
-      } else {
-        lp = of({ "data": {
-          "url":"new-url",
-          "title":"new title",
-          "tiny_text":"tiny text",
-          "text":"write here ...",
-        } });
-      }
+        var lp;
+        if (this.post_id != 'new') {
+          lp = this.api.get("post/" + this.domain_id + "/" + this.post_id);
+        } else {
+          lp = of({
+            "data": {
+              "url": "new-url",
+              "title": "new title",
+              "tiny_text": "tiny text",
+              "text": "write here ...",
+              "ldjson": "{}",
+            }
+          });
+        }
 
-      this.post = lp.pipe(map(x => {
+        this.post = lp.pipe(map(x => {
 
-        return Object.assign(new post(this.api, this.domain_id, this.post_id,this.router,this.ar), x);
+          return Object.assign(new post(this.api, this.domain_id, this.post_id, this.router, this.ar), x);
 
-      }));
+        }));
 
 
 
@@ -59,6 +62,7 @@ export class PostComponent implements OnInit {
   }
 
 
+  
 
 
   ngOnInit(): void {
@@ -69,26 +73,131 @@ export class PostComponent implements OnInit {
     this.post_id = 55;
   }
 
+
+  setup(editor: any) {
+    var openDialog = function () {
+      return editor.windowManager.open({
+        title: 'enter namasha url',
+        body: {
+          type: 'panel',
+          items: [
+            {
+              type: 'input',
+              name: 'url',
+              label: 'namasha url',
+            },
+            {
+              type: 'htmlpanel',
+              name: 'url2',
+              html: '<div id ="imgboxtmp" contenteditable="true" onclick="this.innerHTML = \'\'" >paste image here</div>',
+            },
+          ],
+        },
+        buttons: [
+          {
+            type: 'cancel',
+            text: 'Close',
+          },
+          {
+            type: 'submit',
+            text: 'add',
+            primary: true,
+          },
+        ],
+        onSubmit: function (api: any) {
+          var data = api.getData();
+          //console.log(api.block())
+          var xz = document.getElementById('imgboxtmp');
+
+
+
+
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', 'https://sc.upid.ir/base64api.php');
+          xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+
+          xhr.onreadystatechange = () => {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+
+              var lparse = JSON.parse(xhr.responseText);
+
+              editor.insertContent(
+                '<video poster="' + lparse['url'] + '" width="' + lparse['width'] + '" height="' + lparse['height'] + '" controls="controls" ><source src="' + data.url + '"></video>'
+              );
+
+
+            }
+          };
+
+
+          var regx = /<img[^>]*src="([^"]+)"[^>]*>/g;
+
+          if (xz != null) {
+            var m = regx.exec(xz.innerHTML);
+
+            if (m != null && m[1] != null) {
+              xhr.send(m[1]);
+            }
+
+          }
+
+
+
+
+
+
+
+          api.close();
+        },
+      });
+    };
+
+    editor.ui.registry.addButton('namasha', {
+      text: 'namasha',
+      onAction: function () {
+        /* Open window */
+        openDialog();
+      },
+    });
+    /* Adds a menu item, which can then be included in any menu via the menu/menubar configuration */
+    editor.ui.registry.addMenuItem('namasha', {
+      text: 'namasha',
+      onAction: function () {
+        /* Open window */
+        openDialog();
+      },
+    });
+    /* Return the metadata for the help plugin */
+    return {
+      getMetadata: function () {
+        return {
+          name: '',
+          url: '',
+        };
+      },
+    };
+  }
+
 }
 
 export class post {
-  
+
   data: any;
 
-  constructor(private api: ApiService, private domain_id: any, public post_id: any,public router: Router,public ar: ActivatedRoute) { }
+  constructor(private api: ApiService, private domain_id: any, public post_id: any, public router: Router, public ar: ActivatedRoute) { }
 
   save() {
     if (this.post_id != "new") {
-      this.api.put("post/" + this.domain_id + "/" + this.post_id, this.data).subscribe(x=>{
-        this.router.navigate(['../../posts'], {relativeTo: this.ar});
+      this.api.put("post/" + this.domain_id + "/" + this.post_id, this.data).subscribe(x => {
+        this.router.navigate(['../../posts'], { relativeTo: this.ar });
       });
 
     } else {
 
-      this.api.post("post/" + this.domain_id + "/" + this.post_id, this.data).subscribe(x=>{
-        
-        this.router.navigate(['../../posts'], {relativeTo: this.ar});
-          this.post_id = x.data.id;
+      this.api.post("post/" + this.domain_id + "/" + this.post_id, this.data).subscribe(x => {
+
+        this.router.navigate(['../../posts'], { relativeTo: this.ar });
+        this.post_id = x.data.id;
 
       });
 
@@ -100,74 +209,124 @@ export class post {
 
   delete() {
 
-    let randx = new Array(5).join().replace(/(.|$)/g, function(){return ((Math.random()*36)|0).toString(36)[Math.random()<.5?"toString":"toUpperCase"]();});
+    let randx = new Array(5).join().replace(/(.|$)/g, function () { return ((Math.random() * 36) | 0).toString(36)[Math.random() < .5 ? "toString" : "toUpperCase"](); });
 
     let delx = confirm("delete this post ?");
 
     if (delx) {
-      document.body.style.display= "none"
-     setTimeout(()=>{
-      
-      document.body.style.display= ""
+      document.body.style.display = "none"
+      setTimeout(() => {
 
-      setTimeout(()=>{
-      
-           if (confirm("motmaen ? ") && prompt("type this reversed : \n\n"+randx, "") == [...randx].reverse().join("")) {
-            this.api.delete("post/" + this.domain_id + "/" + this.post_id).subscribe(x=>{
-              this.router.navigate(['../../posts'], {relativeTo: this.ar});
+        document.body.style.display = ""
+
+        setTimeout(() => {
+
+          if (confirm("motmaen ? ") && prompt("type this reversed : \n\n" + randx, "") == [...randx].reverse().join("")) {
+            this.api.delete("post/" + this.domain_id + "/" + this.post_id).subscribe(x => {
+              this.router.navigate(['../../posts'], { relativeTo: this.ar });
             });
-           } else {
-             alert("نشد");
-           }
-
-          },200);
-
-     },500);
-
-
-  }
-
-  }
-
-
- async  doimg(inp:any, doing:any) {
-      return new Promise(async (resolve) => {
-        var str_s = inp;
-        var regx = /<img[^>]*src="([^"]+)"[^>]*>/g;
-        var m;
-        while ((m = regx.exec(inp))) {
-          if (m[1].includes('webp') == false) {
-            str_s = str_s.replace(m[0], await doing(m[1]));
+          } else {
+            alert("نشد");
           }
+
+        }, 200);
+
+      }, 500);
+
+
+    }
+
+  }
+
+
+  async doimg(inp: any, doing: any) {
+    return new Promise(async (resolve) => {
+      var str_s = inp;
+      var regx = /<img[^>]*src="([^"]+)"[^>]*>/g;
+      var m;
+      while ((m = regx.exec(inp))) {
+        if (m[1].includes('webp') == false) {
+          str_s = str_s.replace(m[0], await doing(m[1]));
         }
-        resolve(str_s);
-      });
-    }
+      }
+      resolve(str_s);
+    });
+  }
 
+
+
+  getJpegBytes(canvas: any, callback: any) {
+    var fileReader = new FileReader();
+
+    fileReader.addEventListener('loadend', function () {
+      callback(this.error, this.result);
+    });
+
+    canvas.toBlob(
+      fileReader.readAsArrayBuffer.bind(fileReader),
+      'image/jpeg'
+    );
+  }
+
+
+  jsondlgen() {
+    var xhr = new XMLHttpRequest();
+
+
+    var regx = /<source[^>]*src="([^"]+)"[^>]*>/g;
+    var m = regx.exec(this.data.text);
+
+    var regx2 = /<video[^>]*poster="([^"]+)"[^>]*>/g;
+    var m2 = regx2.exec(this.data.text);
+
+    var poster = "";
+    if (m2 != null && m2[1] != null) {
+      poster = m2[1];
+    }
     
+    var uu = "";
 
-    getJpegBytes(canvas:any, callback:any) {
-      var fileReader = new FileReader();
-
-      fileReader.addEventListener('loadend', function () {
-        callback(this.error, this.result);
-      });
-
-      canvas.toBlob(
-        fileReader.readAsArrayBuffer.bind(fileReader),
-        'image/jpeg'
-      );
+    if (m != null && m[1] != null) {
+      uu = m[1];
     }
 
+    xhr.open('GET', 'https://upid.ir/namashaapi.php?u='+uu);
+    xhr.setRequestHeader('Content-Type', 'application/octet-stream');
 
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+
+        var lparse = JSON.parse(xhr.responseText);
+ 
+
+        var jsoong = {
+
+          "@context":"https://schema.org/",
+          "@type":"VideoObject",
+          "name":this.data.title,
+          "duration":lparse['dur'],
+          "thumbnailUrl":poster,
+
+        }
+
+        this.data.ldjson = JSON.stringify(jsoong)
+
+        console.log(JSON.stringify(jsoong));
+        this.data.text = this.data.text.replace(uu,lparse['manifest']);
+
+      }
+    };
+
+    xhr.send();
+  }
 
 
   dodox() {
 
-    console.log(this.data.text);
+   
 
     var self = this;
-    this.doimg(this.data.text, (img:any) => {
+    this.doimg(this.data.text, (img: any) => {
       return new Promise((resolve) => {
         var timg = new Image();
 
@@ -180,11 +339,11 @@ export class post {
           x.height = timg.height;
           var ctx = x.getContext('2d');
           if (ctx !== null) {
-          ctx.fillStyle = '#FF0000';
-          ctx.drawImage(timg, 0, 0);
+            ctx.fillStyle = '#FF0000';
+            ctx.drawImage(timg, 0, 0);
           }
 
-          self.getJpegBytes(x, function (error:any, arrayBuffer:any) {
+          self.getJpegBytes(x, function (error: any, arrayBuffer: any) {
             var xhr = new XMLHttpRequest();
             xhr.open('POST', 'https://sc.upid.ir/toteleg.php');
             xhr.setRequestHeader('Content-Type', 'application/octet-stream');
@@ -209,9 +368,9 @@ export class post {
             
           }, 500);*/
       });
-    }).then((m:any) => {
-     
-     self.data.text=m;
+    }).then((m: any) => {
+
+      self.data.text = m;
       //this.khk = m;
     });
 
