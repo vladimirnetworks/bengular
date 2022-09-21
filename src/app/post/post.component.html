@@ -7,7 +7,7 @@
     <input [(ngModel)]="postx.data.title" /><br>
     <textarea [(ngModel)]="postx.data.tiny_text"></textarea><br>
 
-    <textarea (click)="postx.jsondlgen()" [(ngModel)]="postx.data.ldjson" style="width: 100%;height:200px"></textarea><br>
+    <textarea  [(ngModel)]="postx.data.ldjson" style="width: 100%;height:200px"></textarea><br>
 
     <editor  [init]="{
         setup: setup,
@@ -26,6 +26,9 @@
     <button  (click)="postx.save() ; ">save</button>
 
 <button (click)="postx.dodox()">saveimages</button>
+
+<button (click)="postx.jsondlgen()">genldjson</button>
+
    
     <button *ngIf="postx.post_id > 0" (click)="postx.delete(); ">delete</button>
 

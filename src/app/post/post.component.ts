@@ -62,7 +62,7 @@ export class PostComponent implements OnInit {
   }
 
 
-  
+
 
 
   ngOnInit(): void {
@@ -75,6 +75,7 @@ export class PostComponent implements OnInit {
 
 
   setup(editor: any) {
+    var self = this;
     var openDialog = function () {
       return editor.windowManager.open({
         title: 'enter namasha url',
@@ -111,8 +112,21 @@ export class PostComponent implements OnInit {
 
 
 
+          var gjb = function (canvas: any, callback: any) {
+            var fileReader = new FileReader();
 
-          var xhr = new XMLHttpRequest();
+            fileReader.addEventListener('loadend', function () {
+              callback(this.error, this.result);
+            });
+
+            canvas.toBlob(
+              fileReader.readAsArrayBuffer.bind(fileReader),
+              'image/jpeg'
+            );
+          }
+
+
+          /*var xhr = new XMLHttpRequest();
           xhr.open('POST', 'https://sc.upid.ir/base64api.php');
           xhr.setRequestHeader('Content-Type', 'application/octet-stream');
 
@@ -128,6 +142,7 @@ export class PostComponent implements OnInit {
 
             }
           };
+          */
 
 
           var regx = /<img[^>]*src="([^"]+)"[^>]*>/g;
@@ -136,7 +151,46 @@ export class PostComponent implements OnInit {
             var m = regx.exec(xz.innerHTML);
 
             if (m != null && m[1] != null) {
-              xhr.send(m[1]);
+              //xhr.send(m[1]);
+              var img = m[1];
+              var timg = new Image();
+              timg.crossOrigin = 'Anonymous';
+              timg.onload = function () {
+
+                var x = document.createElement('CANVAS') as HTMLCanvasElement;
+                x.width = timg.width;
+                x.height = timg.height;
+                var ctx = x.getContext('2d');
+                if (ctx !== null) {
+                  ctx.fillStyle = '#FF0000';
+                  ctx.drawImage(timg, 0, 0);
+                }
+
+                gjb(x, function (error: any, arrayBuffer: any) {
+                  var xhr = new XMLHttpRequest();
+                  xhr.open('POST', 'https://sc.upid.ir/toteleg2.php');
+                  xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+
+                  xhr.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                      var lparse = JSON.parse(this.responseText);
+                      editor.insertContent(
+                        '<video poster="' + lparse['url'] + '" width="' + lparse['width'] + '" height="' + lparse['height'] + '" controls="controls" ><source src="' + data.url + '"></video>'
+                      );
+                    }
+                  };
+                  xhr.send(arrayBuffer);
+
+                });
+
+              }
+
+              if (!img.includes(';base64,')) {
+                img = 'https://sc.upid.ir/apix.php?url=' + img;
+              }
+
+              timg.src = img;
+
             }
 
           }
@@ -283,36 +337,75 @@ export class post {
     if (m2 != null && m2[1] != null) {
       poster = m2[1];
     }
-    
+
     var uu = "";
 
     if (m != null && m[1] != null) {
       uu = m[1];
     }
 
-    xhr.open('GET', 'https://upid.ir/namashaapi.php?u='+uu);
+    xhr.open('GET', 'https://upid.ir/namashaapi.php?u=' + uu);
     xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+
+    function padTo2Digits(num:any) {
+      return num.toString().padStart(2, '0');
+    }
+    
+    function formatDate(date:any) {
+      return (
+        [
+          date.getFullYear(),
+          padTo2Digits(date.getMonth() + 1),
+          padTo2Digits(date.getDate()),
+        ].join('-') +
+        'T' +
+        [
+          padTo2Digits(date.getHours()),
+          padTo2Digits(date.getMinutes()),
+          padTo2Digits(date.getSeconds()),
+        ].join(':')
+      );
+    }
+
 
     xhr.onreadystatechange = () => {
       if (xhr.readyState == 4 && xhr.status == 200) {
 
         var lparse = JSON.parse(xhr.responseText);
- 
+
+        var las = JSON.parse(this.data.ldjson);
+
+        var uplooddate = formatDate(new Date())+"+03:30";
+
+
+        if (las['uploadDate'] !== undefined) {
+          uplooddate = las['uploadDate'];
+        }
 
         var jsoong = {
 
-          "@context":"https://schema.org/",
-          "@type":"VideoObject",
-          "name":this.data.title,
-          "duration":lparse['dur'],
-          "thumbnailUrl":poster,
+          "@context": "https://schema.org/",
+          "@type": "VideoObject",
+          "name": this.data.title,
+          "duration": lparse['dur'],
+          "thumbnailUrl": poster,
+          "description": this.data.tiny_text,
+          "uploadDate": uplooddate
 
         }
 
-        this.data.ldjson = JSON.stringify(jsoong)
 
-        console.log(JSON.stringify(jsoong));
-        this.data.text = this.data.text.replace(uu,lparse['manifest']);
+
+
+        if (lparse['manifest'] != null) {
+          this.data.ldjson = JSON.stringify(jsoong)
+          this.data.text = this.data.text.replace(uu, lparse['manifest']);
+        } else {
+          if (!uu.includes("Manifest")) {
+            alert("bad video");
+          }
+        }
+
 
       }
     };
@@ -323,7 +416,7 @@ export class post {
 
   dodox() {
 
-   
+
 
     var self = this;
     this.doimg(this.data.text, (img: any) => {
