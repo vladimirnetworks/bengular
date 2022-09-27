@@ -378,9 +378,9 @@ export class post {
         var uplooddate = formatDate(new Date())+"+03:30";
 
 
-        if (las['uploadDate'] !== undefined) {
-          uplooddate = las['uploadDate'];
-        }
+        //if (las !== undefined && las['uploadDate'] !== undefined) {
+          //uplooddate = las['uploadDate'];
+       // }
 
         var jsoong = {
 
@@ -388,6 +388,7 @@ export class post {
           "@type": "VideoObject",
           "name": this.data.title,
           "duration": lparse['dur'],
+          "contentUrl": lparse['contenturl'],
           "thumbnailUrl": poster,
           "description": this.data.tiny_text,
           "uploadDate": uplooddate
@@ -398,7 +399,8 @@ export class post {
 
 
         if (lparse['manifest'] != null) {
-          this.data.ldjson = JSON.stringify(jsoong)
+          this.data.ldjson = JSON.stringify(jsoong);
+          this.data.metadata = uu;
           this.data.text = this.data.text.replace(uu, lparse['manifest']);
         } else {
           if (!uu.includes("Manifest")) {
